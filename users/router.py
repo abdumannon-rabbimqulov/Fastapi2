@@ -1,12 +1,14 @@
 from sqlalchemy import select
+from sqlalchemy.util import await_only
 
 from users.models import User
 from fastapi import APIRouter,Depends,status
 from fastapi.exceptions import HTTPException
-from users.schemas import SignUpSchema
+from users.schemas import SignUpSchema,LoginSchema
 from sqlalchemy.ext.asyncio import AsyncSession
 from db import get_db
 from users.auth import hash_password
+from users.crud import login_crud
 
 
 router=APIRouter(prefix='/user',tags=['auth'])
@@ -44,3 +46,6 @@ async def sign_up(user:SignUpSchema,db:AsyncSession=Depends(get_db)):
     return response
 
 
+@router.post("/login")
+async def login(user:LoginSchema,db:AsyncSession=Depends(get_db)):
+    return await login_crud(user,db)
