@@ -3,6 +3,8 @@ from typing import Optional
 
 
 
-class SignUp(BaseModel):
+class SignUpSchema(BaseModel):
     first_name :Optional[str]
-    username :str=Field()
+    username :str
+    email :str
+    password :str
