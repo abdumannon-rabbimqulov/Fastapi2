@@ -1,0 +1,11 @@
+Jinja2==3.1.6
+PyYAML==6.0.3
+Pygments==2.20.0
+SQLAlchemy==2.0.49
+fastapi-cli==0.0.24
+mdurl==0.1.2
+passlib==1.7.4
+pip-chill==1.0.5
+pydantic_core==2.41.5
+python-jose==3.5.0
+uvicorn==0.44.0

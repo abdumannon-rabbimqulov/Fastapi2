@@ -1,6 +1,4 @@
 from sqlalchemy import select
-from sqlalchemy.util import await_only
-
 from users.models import User
 from fastapi import APIRouter,Depends,status
 from fastapi.exceptions import HTTPException
