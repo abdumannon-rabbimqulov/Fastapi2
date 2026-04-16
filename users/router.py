@@ -6,6 +6,7 @@ from fastapi.exceptions import HTTPException
 from users.schemas import SignUpSchema
 from sqlalchemy.ext.asyncio import AsyncSession
 from db import get_db
+from users.auth import hash_password
 
 
 router=APIRouter(prefix='/user',tags=['auth'])
@@ -13,16 +14,33 @@ router=APIRouter(prefix='/user',tags=['auth'])
 
 @router.post("/sign-up")
 async def sign_up(user:SignUpSchema,db:AsyncSession=Depends(get_db)):
-    db_username=db.execute(select(User)).where(User.username==user.username)
-    db_email=db.execute(select(User)).where(User.email==user.email)
+    username=await db.execute(select(User).where(User.username==user.username))
+    email=await db.execute(select(User).where(User.email==user.email))
+    db_username=username.scalar_one_or_none()
+    db_email=email.scalar_one_or_none()
+
     if db_username:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail='bu username band')
     if db_email:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail='bu email band')
-    user=User(**user.model_dump())
+    user=User(
+        first_name=user.first_name,
+        username=user.username,
+        email=user.email,
+        password=hash_password(user.password)
+    )
 
-    await db.add(user)
+    db.add(user)
     await db.commit()
     await db.refresh(user)
+    response={
+        'status':status.HTTP_201_CREATED,
+        "message":"ro'yxatdan o'tdiz",
+        "data":{
+            "username":user.username,
+            "email":user.email
+        }
+    }
+    return response
 
 

@@ -8,7 +8,7 @@ load_dotenv()
 
 Database_URl =os.getenv("DB_URl")
 
-engine=create_async_engine(Database_URl)
+engine=create_async_engine(Database_URl,echo=True)
 
 async_session = async_sessionmaker(engine, expire_on_commit=False)
 
