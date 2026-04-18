@@ -33,3 +33,4 @@ async def login_crud(data:LoginSchema,db:AsyncSession):
 
     return response
 
+kjb'oboo opnpbn'
