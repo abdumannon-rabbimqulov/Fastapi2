@@ -20,7 +20,6 @@ async def login_crud(data:LoginSchema,db:AsyncSession):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail="parol xato")
 
     token_data={"sub":str(db_user.id)}
-
     refresh_token=create_refresh_token(token_data)
     access_token=create_access_token(token_data)
 
@@ -33,4 +32,3 @@ async def login_crud(data:LoginSchema,db:AsyncSession):
 
     return response
 
-kjb'oboo opnpbn'
