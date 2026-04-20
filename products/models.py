@@ -4,6 +4,7 @@ from sqlalchemy.sql import func
 
 
 class Products(Base):
+    __tablename__ = "products"
     id =Column(Integer,primary_key=True)
     title = Column(String(100))
     price=Column(Numeric(10,2),nullable=False)
