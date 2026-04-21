@@ -31,11 +31,11 @@ class CardItem(Base):
 
 
 class OrderStatus(enum.Enum):
-    PENDING = "pending"     # Kutilmoqda
-    PAID = "paid"           # To'landi
-    SHIPPED = "shipped"     # Yo'lga chiqdi
-    DELIVERED = "delivered" # Yetkazildi
-    CANCELLED = "cancelled" # Bekor qilindi
+    PENDING = "pending"
+    PAID = "paid"
+    SHIPPED = "shipped"
+    DELIVERED = "delivered"
+    CANCELLED = "cancelled"
 
 
 class Order(Base):
