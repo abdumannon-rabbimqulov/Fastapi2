@@ -11,7 +11,7 @@ async def create_product(data:ProductCreate,db:AsyncSession):
     product=Products(**data.model_dump())
 
     try:
-        await db.add(product)
+        db.add(product)
         await db.commit()
         await db.refresh(product)
         return product

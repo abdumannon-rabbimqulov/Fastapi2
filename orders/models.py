@@ -3,6 +3,7 @@ from db import Base
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 import enum
+from products.models import Products
 
 
 class Card(Base):
@@ -27,7 +28,7 @@ class CardItem(Base):
 
 
     card = relationship("Card", back_populates="items")
-    product = relationship("Product")
+    product = relationship("Products")
 
 
 class OrderStatus(enum.Enum):
@@ -45,7 +46,7 @@ class Order(Base):
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
     status = Column(
-        enum.Enum(OrderStatus),
+        Enum(OrderStatus),
         default=OrderStatus.PENDING,
         nullable=False
     )
@@ -67,4 +68,4 @@ class OrderItem(Base):
     price = Column(Numeric(10, 2), nullable=False)
 
     order = relationship("Order", back_populates="items")
-    product = relationship("Product")
+    product = relationship("Products")

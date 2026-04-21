@@ -1,13 +1,12 @@
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
-
 from orders.schemas import CardItemCreate
 from orders.models import Card,CardItem
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
 async def add_item_to_card(user_id: int, item_data: CardItemCreate, db: AsyncSession):
-    result=await db.execute(select(Card).where(Card.user_id==user_id)).options(selectinload(Card.items))
+    result=await db.execute(select(Card).where(Card.user_id==user_id))
     card=result.scalar_one_or_none()
 
     if not card:
@@ -28,6 +27,7 @@ async def add_item_to_card(user_id: int, item_data: CardItemCreate, db: AsyncSes
 
         if existing_item.quantity <= 0:
             await db.delete(existing_item)
+            return None
     else:
         if item_data.quantity > 0:
             new_item = CardItem(
