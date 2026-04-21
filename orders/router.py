@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from db import get_db  # DB session funksiyangiz
+from db import get_db
 from orders.schemas import CardItemCreate, CardResponse
 from orders.crud import add_item_to_card
 from users.auth import get_current_user
@@ -17,3 +17,6 @@ async def add_to_cart(
     result = await add_item_to_card(user_id=user_id, item_data=item_data, db=db)
 
     return {"message": "Mahsulot savatchaga muvaffaqiyatli qo'shildi"}
+
+
+
