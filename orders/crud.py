@@ -73,7 +73,7 @@ async def delete_card_all(user_id:int,db:AsyncSession):
     return False
 
 
-async def order_create(user_id:int,data:OrderCreate,db:AsyncSession):
+async def order_create(user_id:int,db:AsyncSession):
     result =await db.execute(select(Card).where(Card.user_id==user_id))
     card=result.scalar_one_or_none()
 

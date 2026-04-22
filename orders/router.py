@@ -1,8 +1,11 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from db import get_db
-from orders.schemas import CardItemCreate, CardResponse
-from orders.crud import add_item_to_card,delete,delete_card_all
+from orders.schemas import CardItemCreate, CardResponse,OrderResponse
+from orders.crud import (
+    add_item_to_card,delete,delete_card_all,
+    order_create
+)
 from users.auth import get_current_user
 from fastapi.exceptions import HTTPException
 from fastapi import status
@@ -58,6 +61,16 @@ async def card_all_delete(
 
 
 
+@router.post("/order-create",response_model=OrderResponse)
+async def create_order(user_id:int=Depends(get_current_user),db:AsyncSession=Depends(get_db)):
+    db_order=await order_create(user_id=user_id,db=db)
 
+    if not db_order:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Buyurtma yaratishda xatolik (savatcha bo'sh bo'lishi mumkin)"
+        )
+
+    return db_order
 
 
