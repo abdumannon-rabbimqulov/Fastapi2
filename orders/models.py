@@ -26,6 +26,7 @@ class CardItem(Base):
 
     quantity = Column(Integer, default=1, nullable=False)
 
+    price = Column(Numeric(10, 2), nullable=False)
 
     card = relationship("Card", back_populates="items")
     product = relationship("Products")
