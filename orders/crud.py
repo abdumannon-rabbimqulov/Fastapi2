@@ -40,3 +40,5 @@ async def add_item_to_card(user_id: int, item_data: CardItemCreate, db: AsyncSes
     await db.commit()
     await db.refresh(card)
     return card
+
+
