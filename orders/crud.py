@@ -5,7 +5,7 @@ from orders.schemas import CardItemCreate,OrderCreate
 from orders.models import Card, CardItem, OrderItem
 from sqlalchemy.ext.asyncio import AsyncSession
 from decimal import Decimal
-from orders.models import Order
+from orders.models import Order,OrderStatus
 
 
 async def add_item_to_card(user_id: int, item_data: CardItemCreate, db: AsyncSession):
@@ -130,5 +130,35 @@ async def order_create(user_id:int,db:AsyncSession):
     except Exception as e:
         await db.rollback()
         raise e
+
+
+async def cancelled_order(user_id:int,order_id:int,db:AsyncSession):
+    result= await db.execute(select(Order).where(
+        Order.user_id==user_id,
+        Order.id==order_id
+    ))
+
+    db_order=result.scalar_one_or_none()
+
+    if db_order is None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail="topilmadi order")
+
+    if db_order.status!=OrderStatus.PENDING:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Ushbu buyurtmani bekor qilib bo'lmaydi. Hozirgi holat: {db_order.status}"
+        )
+
+    db_order.status=OrderStatus.CANCELLED
+
+    try:
+        await db.commit()
+        await db.refresh(db_order)
+        return db_order
+    except Exception as e:
+        await db.rollback()
+        raise e
+
+
 
 

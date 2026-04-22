@@ -34,7 +34,7 @@ class CardItem(Base):
 
 class OrderStatus(enum.Enum):
     PENDING = "pending"
-    PAID = "paid"
+    PROCESSING = "processing"
     SHIPPED = "shipped"
     DELIVERED = "delivered"
     CANCELLED = "cancelled"

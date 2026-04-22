@@ -4,13 +4,13 @@ from db import get_db
 from orders.schemas import CardItemCreate, CardResponse,OrderResponse
 from orders.crud import (
     add_item_to_card,delete,delete_card_all,
-    order_create
+    order_create,cancelled_order
 )
 from users.auth import get_current_user
 from fastapi.exceptions import HTTPException
 from fastapi import status
 
-router = APIRouter(prefix="/order", tags=["Cart"])
+router = APIRouter(prefix="/order", tags=["Order"])
 
 
 @router.post("/add-cart", response_model=None)
@@ -73,4 +73,10 @@ async def create_order(user_id:int=Depends(get_current_user),db:AsyncSession=Dep
 
     return db_order
 
+
+@router.post("/order-cancelled/{order_id}")
+async def create_order(order_id:int,user_id:int=Depends(get_current_user),db:AsyncSession=Depends(get_db)):
+    db_order=await cancelled_order(user_id=user_id,db=db,order_id=order_id)
+
+    return db_order
 
