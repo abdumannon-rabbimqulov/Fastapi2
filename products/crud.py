@@ -7,8 +7,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 
 
-async def create_product(data:ProductCreate,db:AsyncSession):
-    product=Products(**data.model_dump())
+async def create_product(user_id:int,data:ProductCreate,db:AsyncSession):
+    product_data=data.model_dump()
+    product_data["user_id"]=user_id
+    product=Products(**product_data)
 
     try:
         db.add(product)
@@ -20,8 +22,11 @@ async def create_product(data:ProductCreate,db:AsyncSession):
         raise e
 
 
-async def update_product(pk:int,data:ProductUpdate,db:AsyncSession):
-    result=await db.execute(select(Products)).where(Products.id==pk)
+async def update_product(pk:int,data:ProductUpdate,db:AsyncSession,user_id:int):
+    result=await db.execute(select(Products).where(
+        Products.id==pk,
+        Products.user_id==user_id)
+    )
     product=result.scalar_one_or_none()
     if not product:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail="product topilmadi ")
@@ -36,20 +41,28 @@ async def update_product(pk:int,data:ProductUpdate,db:AsyncSession):
     await db.refresh(product)
     return product
 
-async def get_all(db:AsyncSession):
-    result=await db.execute(select(Products))
+async def get_all(db:AsyncSession,user_id:int):
+    result=await db.execute(select(Products)).where(Products.user_id==user_id)
     products=result.scalars().all()
     return products
 
 
-async def get(product_id: int, db: AsyncSession):
-    result = await db.execute(select(Products).where(Products.id == product_id))
+async def get(product_id: int, db: AsyncSession,user_id:int):
+    result = await db.execute(select(Products).where(
+        Products.id == product_id,
+        Products.user_id==user_id
+        )
+    )
     product = result.scalar_one_or_none()
     return product
 
 
-async def delete(product_id: int, db: AsyncSession):
-    result = await db.execute(select(Products).where(Products.id == product_id))
+async def delete(product_id: int, db: AsyncSession,user_id:int):
+    result = await db.execute(select(Products).where(
+        Products.id == product_id,
+        Products.user_id==user_id
+        )
+    )
     db_product = result.scalar_one_or_none()
     if not db_product:
         return None
