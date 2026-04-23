@@ -3,13 +3,13 @@ from typing import List
 from  fastapi import APIRouter,Depends,status
 from sqlalchemy.ext.asyncio import AsyncSession
 from users.auth import get_current_user
-from products.schemas import *
+from Post.schemas import *
 from db import get_db
-from products.crud import create_product,get,get_all,update_product,delete
+from Post.crud import create_product,get,get_all,update_product,delete
 from fastapi.exceptions import HTTPException
 
 
-router=APIRouter(prefix="/product",tags=["products"])
+router=APIRouter(prefix="/product",tags=["Post"])
 
 
 

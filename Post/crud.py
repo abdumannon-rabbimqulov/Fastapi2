@@ -1,8 +1,8 @@
 from fastapi import status
 from sqlalchemy import select
 from fastapi.exceptions import HTTPException
-from products.schemas import ProductBase,ProductCreate,ProductResponse,ProductUpdate
-from products.models import Products
+from Post.schemas import ProductBase,ProductCreate,ProductResponse,ProductUpdate
+from Post.models import Products
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
