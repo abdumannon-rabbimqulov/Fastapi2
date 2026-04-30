@@ -7,8 +7,14 @@ app=FastAPI()
 app.include_router(user_router)
 
 
-@app.on_event("startup")
-async def startup():
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+import asyncio
 
+async def startup():
+    for _ in range(10):
+        try:
+            async with engine.begin() as conn:
+                print("DB connected ✅")
+                return
+        except Exception:
+            print("DB kutilyapti...")
+            await asyncio.sleep(2)
