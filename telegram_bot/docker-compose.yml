@@ -23,6 +23,13 @@ services:
       - GEMINI_MODEL=${GEMINI_MODEL}
     depends_on:
       - db
-
+  logistika-redis:
+    image: redis:7-alpine
+    container_name: logistika_redis
+    ports:
+      - "6381:6379"
+    restart: always
+    networks:
+      - logistika_network
 volumes:
   pgdata:
